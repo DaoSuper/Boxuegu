@@ -38,7 +38,6 @@
 
     <EditText
         android:id="@+id/et_psw"
-        android:inputType="textPassword"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
@@ -48,6 +47,7 @@
         android:drawableLeft="@drawable/psw_icon"
         android:drawablePadding="10dp"
         android:hint="请输入密码"
+        android:inputType="textPassword"
         android:paddingLeft="8dp"
         android:singleLine="true"
         android:textColor="#000000"
