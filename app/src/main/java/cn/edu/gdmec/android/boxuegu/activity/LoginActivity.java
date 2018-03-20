@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent data = new Intent();
                     data.putExtra("isLogin", true);
                     setResult(RESULT_OK, data);
-                    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     return;
                 } else if (!TextUtils.isEmpty(spPsw) && !md5Psw.equals(spPsw)) {

@@ -16,6 +16,7 @@ import cn.edu.gdmec.android.boxuegu.R;
 public class SplashActivity extends AppCompatActivity {
 
     private TextView tv_version;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,22 +27,22 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void init() {
-        tv_version=(TextView) findViewById(R.id.tv_version);
+        tv_version = (TextView) findViewById(R.id.tv_version);
         try {
             //获取程序包信息
-            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(),0);
-            tv_version.setText("V"+info.versionName);
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
+            tv_version.setText("V" + info.versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             tv_version.setText("V");
         }
         //利用Timer让此界面延迟3秒后跳转,timer中有一个线程，这个线程不断执行task
-        Timer timer =new Timer();
+        Timer timer = new Timer();
         //timertask实现runnable接口,TimerTask类表示一个在指定时间内执行的task
-        TimerTask task=new TimerTask() {
+        TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                Intent intent=new Intent(SplashActivity.this,MainActivity.class);
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 SplashActivity.this.finish();
             }
