@@ -61,15 +61,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent,1);
             }
         });
-        //找回密码控件的事件
-//        tv_find_psw.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //跳转到找回密码界面
-//                Intent intent = new Intent(LoginActivity.this, FindPswActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+       //找回密码控件的事件
+       tv_find_psw.setOnClickListener(new View.OnClickListener() {
+           @Override
+        public void onClick(View view) {
+               //跳转到找回密码界面
+               Intent intent = new Intent(LoginActivity.this, FindPwdActivity.class);
+                startActivity(intent);
+           }
+       });
         //登录按钮的点击事件
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
