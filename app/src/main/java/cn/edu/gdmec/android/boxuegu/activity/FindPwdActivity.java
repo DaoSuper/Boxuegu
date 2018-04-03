@@ -24,8 +24,9 @@ public class FindPwdActivity extends AppCompatActivity {
     private TextView tv_user_name;
     private EditText et_user_name;
     private EditText et_validate_name;
-    private TextView tv_reset_pwd;
     private Button btn_validate;
+    private TextView tv_reset_pwd;
+    private EditText et_new_pwd;
     private String from;
 
     @Override
@@ -48,6 +49,9 @@ public class FindPwdActivity extends AppCompatActivity {
         et_validate_name = (EditText) findViewById(R.id.et_validate_name);
         tv_reset_pwd = (TextView) findViewById(R.id.tv_reset_pwd);
         btn_validate = (Button) findViewById(R.id.btn_validate);
+        tv_reset_pwd = findViewById(R.id.tv_reset_pwd);
+        et_new_pwd = (EditText)findViewById(R.id.et_findnew_pwd);
+
         if ("security".equals(from)) {
             tv_main_title.setText("设置密保");
         } else {
@@ -84,7 +88,7 @@ public class FindPwdActivity extends AppCompatActivity {
                 return;
             }
         } else {   //找回密码
-            String userName = et_user_name.getText().toString().trim();
+            final String userName = et_user_name.getText().toString().trim();
             String sp_security = readSecurity(userName);     //密保名
             if (TextUtils.isEmpty(userName)) {
                 Toast.makeText(FindPwdActivity.this, "请输入您的用户名", Toast.LENGTH_SHORT).show();
@@ -101,8 +105,19 @@ public class FindPwdActivity extends AppCompatActivity {
             } else {
                 //输入密保正确，重新给用户设置一个密码
                 tv_reset_pwd.setVisibility(View.VISIBLE);
-                tv_reset_pwd.setText("初始化密码：123456");
-                savePwd(userName);
+                et_new_pwd.setVisibility(View.VISIBLE);
+                btn_validate.setText("确认");
+                btn_validate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final String newpwd = et_new_pwd.getText().toString().trim();
+                        savePwd(userName,newpwd);
+                        FindPwdActivity.this.finish();
+                    }
+                });
+                //tv_reset_pwd.setVisibility(View.VISIBLE);
+                //tv_reset_pwd.setText("初始化密码：123456");
+                //savePwd(userName);
             }
         }
     }
@@ -110,8 +125,8 @@ public class FindPwdActivity extends AppCompatActivity {
     /**
      * 保存初始化密码
      **/
-    private void savePwd(String userName) {
-        String md5Psw = MD5Utils.md5("123456");
+    private void savePwd(String userName,String newPwd) {
+        String md5Psw = MD5Utils.md5(newPwd);
         SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(userName, md5Psw);

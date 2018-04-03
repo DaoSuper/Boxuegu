@@ -50,7 +50,8 @@ public class SettingActivity extends AppCompatActivity {
         rl_modiy_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //跳转到修改密码界面
+                Intent intent = new Intent(SettingActivity.this,ModifyPwdActivity.class);
+                startActivity(intent);
             }
         });
         rl_security_setting.setOnClickListener(new View.OnClickListener() {
