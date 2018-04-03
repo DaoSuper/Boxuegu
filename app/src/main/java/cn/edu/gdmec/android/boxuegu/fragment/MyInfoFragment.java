@@ -88,7 +88,6 @@ public class MyInfoFragment extends Fragment {
 
     /**
      * 这个方法用在onViewCreated()，每次初始化这个界面都会启动
-     * 通过登录后留在此页面并且立刻刷新用户名会在MainActivity的onActivityResult中处理
      **/
     private void setLoginParams(boolean isLogin) {
         if (isLogin) {

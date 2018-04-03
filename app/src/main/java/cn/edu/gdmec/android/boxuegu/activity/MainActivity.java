@@ -3,6 +3,7 @@ package cn.edu.gdmec.android.boxuegu.activity;
 /**
  * Created by apple on 18/3/27.
  */
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,12 +50,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
-            switch (requestCode) {
-                case 1:  //从“我”的界面跳转到登录界面
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_body, new CourseFragment()).commit();
-                    clearBottomImageState();
-                    setSelectedStatus(0);
-                    break;
+            boolean isLogin = data.getBooleanExtra("isLogin", false);
+            //从登录活动获得isLogin==true,从设置活动获得isLogin==false，他们的请求码都是1
+            //之后还可以根据请求码和结果码完成更多需求
+            if (isLogin) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_body, new CourseFragment()).commit();
+                clearBottomImageState();
+                setSelectedStatus(0);
+            } else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_body, new MyInfoFragment()).commit();
+                clearBottomImageState();
+                setSelectedStatus(2);
             }
         }
     }

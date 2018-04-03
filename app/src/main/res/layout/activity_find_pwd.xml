@@ -71,7 +71,7 @@
         android:visibility="gone"/>
 
     <EditText
-        android:id="@+id/et_findnew_pwd"
+        android:id="@+id/et_reset_pwd"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
         android:layout_gravity="center_horizontal"

@@ -21,13 +21,13 @@ public class SettingActivity extends AppCompatActivity {
     private RelativeLayout rl_modiy_pwd;
     private RelativeLayout rl_security_setting;
     private RelativeLayout rl_exit_login;
-    public static SettingActivity instance = null; //>???
+    public static SettingActivity instance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        instance = this;
+        instance = this;      //用来修改完密码后关闭自己
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         init();
     }
@@ -50,7 +50,7 @@ public class SettingActivity extends AppCompatActivity {
         rl_modiy_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SettingActivity.this,ModifyPwdActivity.class);
+                Intent intent = new Intent(SettingActivity.this, ModifyPwdActivity.class);
                 startActivity(intent);
             }
         });

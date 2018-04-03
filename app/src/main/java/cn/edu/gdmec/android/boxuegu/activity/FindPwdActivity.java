@@ -26,7 +26,7 @@ public class FindPwdActivity extends AppCompatActivity {
     private EditText et_validate_name;
     private Button btn_validate;
     private TextView tv_reset_pwd;
-    private EditText et_new_pwd;
+    private EditText et_reset_pwd;
     private String from;
 
     @Override
@@ -50,7 +50,7 @@ public class FindPwdActivity extends AppCompatActivity {
         tv_reset_pwd = (TextView) findViewById(R.id.tv_reset_pwd);
         btn_validate = (Button) findViewById(R.id.btn_validate);
         tv_reset_pwd = findViewById(R.id.tv_reset_pwd);
-        et_new_pwd = (EditText)findViewById(R.id.et_findnew_pwd);
+        et_reset_pwd = (EditText) findViewById(R.id.et_reset_pwd);
 
         if ("security".equals(from)) {
             tv_main_title.setText("设置密保");
@@ -105,14 +105,19 @@ public class FindPwdActivity extends AppCompatActivity {
             } else {
                 //输入密保正确，重新给用户设置一个密码
                 tv_reset_pwd.setVisibility(View.VISIBLE);
-                et_new_pwd.setVisibility(View.VISIBLE);
+                et_reset_pwd.setVisibility(View.VISIBLE);
                 btn_validate.setText("确认");
                 btn_validate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final String newpwd = et_new_pwd.getText().toString().trim();
-                        savePwd(userName,newpwd);
-                        FindPwdActivity.this.finish();
+                        String resetPwd = et_reset_pwd.getText().toString().trim();
+                        //暂时仅验证不为空
+                        if (!TextUtils.isEmpty(resetPwd)) {
+                            savePwd(userName, resetPwd);
+                            FindPwdActivity.this.finish();
+                        } else {
+                            Toast.makeText(FindPwdActivity.this, "请输入要设置的新密码", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 //tv_reset_pwd.setVisibility(View.VISIBLE);
@@ -125,8 +130,8 @@ public class FindPwdActivity extends AppCompatActivity {
     /**
      * 保存初始化密码
      **/
-    private void savePwd(String userName,String newPwd) {
-        String md5Psw = MD5Utils.md5(newPwd);
+    private void savePwd(String userName, String resetPwd) {
+        String md5Psw = MD5Utils.md5(resetPwd);
         SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(userName, md5Psw);
