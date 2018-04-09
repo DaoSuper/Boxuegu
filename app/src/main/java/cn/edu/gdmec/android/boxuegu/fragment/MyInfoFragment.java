@@ -16,6 +16,7 @@ import android.widget.Toast;
 import cn.edu.gdmec.android.boxuegu.R;
 import cn.edu.gdmec.android.boxuegu.activity.LoginActivity;
 import cn.edu.gdmec.android.boxuegu.activity.SettingActivity;
+import cn.edu.gdmec.android.boxuegu.activity.UserInfoActivity;
 import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 
 /**
@@ -50,8 +51,8 @@ public class MyInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (AnalysisUtils.readLoginStatus(getActivity())) {
-                    /*Intent intent = new Intent(getActivity(), UserInfoActivity.class);
-                    getActivity().startActivity(intent);*/
+                    Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+                    getActivity().startActivity(intent);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     //startActivity(intent);  若是登录完自动跳转到课程界面，则直接用这个方法即可，这里修改以防后面需要
@@ -88,6 +89,7 @@ public class MyInfoFragment extends Fragment {
 
     /**
      * 这个方法用在onViewCreated()，每次初始化这个界面都会启动
+     * 通过登录后留在此页面并且立刻刷新用户名会在MainActivity的onActivityResult中处理
      **/
     private void setLoginParams(boolean isLogin) {
         if (isLogin) {
