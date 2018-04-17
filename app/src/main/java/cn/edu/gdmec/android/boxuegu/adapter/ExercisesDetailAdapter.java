@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,41 +21,35 @@ import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
  */
 
 public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetailAdapter.ViewHolder>{
+    private List<ExercisesBean> objects = new ArrayList<ExercisesBean>();
+    private ArrayList<String> selectedPosition = new ArrayList<String>();
     private Context mContext;
-    private List<ExercisesBean> ebl;
+    private LayoutInflater layoutInflater;
     private OnSelectListener onSelectListener;
 
     public ExercisesDetailAdapter(Context context,OnSelectListener onSelectListener){
         this.mContext = context;
+        this.layoutInflater = LayoutInflater.from(context);
         this.onSelectListener = onSelectListener;
     }
 
-    public void setData(List<ExercisesBean> ebl){
-        this.ebl = ebl;
-        notifyDataSetChanged();
-    }
 
-    @Override
-    public int getCount() {
-        return ebl == null ? 0 : ebl.size();
-    }
-
-    @Override
-    public ExercisesBean getItem(int position) {
-        return ebl == null ? null : ebl.get(position);
-    }
-
-    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.exercises_detail_list_item, parent,false);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+            initializeViews(objects.get(position), holder, position);
     }
 
+    public void setData(List<ExercisesBean> objects){
+        this.objects = objects;
+    }
+    
     @Override
     public long getItemId(int position) {
         return position;
@@ -62,144 +57,119 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
 
     @Override
     public int getItemCount() {
-        return 0;
+        return objects.size();
     }
 
-    /**
-     * 记录点击的位置
-     */
-    private ArrayList<String> selectedPosition = new ArrayList<String>();
+    private void initializeViews(ExercisesBean object, final ViewHolder holder, final int position) {
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        final ViewHolder vh;
-        if (convertView == null){
-            vh = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.exercises_detail_list_item,null);
-            vh.subject = (TextView) convertView.findViewById(R.id.tv_subject);
-            vh.tv_a = (TextView) convertView.findViewById(R.id.tv_a);
-            vh.tv_b = (TextView) convertView.findViewById(R.id.tv_b);
-            vh.tv_c = (TextView) convertView.findViewById(R.id.tv_c);
-            vh.tv_d = (TextView) convertView.findViewById(R.id.tv_d);
-
-            vh.iv_a = (ImageView)convertView.findViewById(R.id.iv_a);
-            vh.iv_b = (ImageView)convertView.findViewById(R.id.iv_b);
-            vh.iv_c = (ImageView)convertView.findViewById(R.id.iv_c);
-            vh.iv_d = (ImageView)convertView.findViewById(R.id.iv_d);
-
-            convertView.setTag(vh);
-        }else{
-            vh = (ViewHolder)convertView.getTag();
-        }
-
-        final  ExercisesBean bean = getItem(position);
+        final  ExercisesBean bean = object;
         if (bean != null){
-            vh.subject.setText(bean.subject);
-            vh.tv_a.setText(bean.a);
-            vh.tv_b.setText(bean.b);
-            vh.tv_c.setText(bean.c);
-            vh.tv_d.setText(bean.d);
+            holder.subject.setText(bean.subject);
+            holder.tv_a.setText(bean.a);
+            holder.tv_b.setText(bean.b);
+            holder.tv_c.setText(bean.c);
+            holder.tv_d.setText(bean.d);
         }
 
         if (!selectedPosition.contains("" + position)){
-            vh.iv_a.setImageResource(R.drawable.exercises_a);
-            vh.iv_b.setImageResource(R.drawable.exercises_b);
-            vh.iv_c.setImageResource(R.drawable.exercises_c);
-            vh.iv_d.setImageResource(R.drawable.exercises_d);
-            AnalysisUtils.setABCDEnable(true,vh.iv_a,vh.iv_b,vh.iv_c,vh.iv_d);
+            holder.iv_a.setImageResource(R.drawable.exercises_a);
+            holder.iv_b.setImageResource(R.drawable.exercises_b);
+            holder.iv_c.setImageResource(R.drawable.exercises_c);
+            holder.iv_d.setImageResource(R.drawable.exercises_d);
+            AnalysisUtils.setABCDEnable(true,holder.iv_a,holder.iv_b,holder.iv_c,holder.iv_d);
         }else {
-            AnalysisUtils.setABCDEnable(true,vh.iv_a,vh.iv_b,vh.iv_c,vh.iv_d);
+            AnalysisUtils.setABCDEnable(true,holder.iv_a,holder.iv_b,holder.iv_c,holder.iv_d);
             switch (bean.select){
                 case 0:
                     //用户所选项是正确的
                     if (bean.answer == 1){
-                        vh.iv_a.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_a.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 2){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_b.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_b.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 3){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_c.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_c.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 4){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
-                        vh.iv_d.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_d.setImageResource(R.drawable.exercises_right_icon);
                     }
                     break;
                 case 1:
                     //用户所选项A是错误
-                    vh.iv_a.setImageResource(R.drawable.exercises_error_icon);
+                    holder.iv_a.setImageResource(R.drawable.exercises_error_icon);
                     if (bean.answer == 2){
-                        vh.iv_b.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_b.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 3){
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_c.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_c.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 4){
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
-                        vh.iv_d.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_d.setImageResource(R.drawable.exercises_right_icon);
                     }
                     break;
                 case 2:
                     //用户所选项B是错误
-                    vh.iv_b.setImageResource(R.drawable.exercises_error_icon);
+                    holder.iv_b.setImageResource(R.drawable.exercises_error_icon);
                     if (bean.answer == 1){
-                        vh.iv_a.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_a.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 3){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_c.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_c.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 4){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
-                        vh.iv_d.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_d.setImageResource(R.drawable.exercises_right_icon);
                     }
                     break;
                 case 3:
                     //用户所选项C是错误
-                    vh.iv_c.setImageResource(R.drawable.exercises_error_icon);
+                    holder.iv_c.setImageResource(R.drawable.exercises_error_icon);
                     if (bean.answer == 1){
-                        vh.iv_a.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_a.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 2){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_b.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_d.setImageResource(R.drawable.exercises_d);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_b.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_d.setImageResource(R.drawable.exercises_d);
                     }else if (bean.answer == 4){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_d.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_d.setImageResource(R.drawable.exercises_right_icon);
                     }
                     break;
                 case 4:
                     //用户所选项D是错误
-                    vh.iv_d.setImageResource(R.drawable.exercises_error_icon);
+                    holder.iv_d.setImageResource(R.drawable.exercises_error_icon);
                     if (bean.answer == 1){
-                        vh.iv_a.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_a.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
                     }else if (bean.answer == 2){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_b.setImageResource(R.drawable.exercises_right_icon);
-                        vh.iv_c.setImageResource(R.drawable.exercises_c);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_b.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_c.setImageResource(R.drawable.exercises_c);
                     }else if (bean.answer == 3){
-                        vh.iv_a.setImageResource(R.drawable.exercises_a);
-                        vh.iv_b.setImageResource(R.drawable.exercises_b);
-                        vh.iv_d.setImageResource(R.drawable.exercises_right_icon);
+                        holder.iv_a.setImageResource(R.drawable.exercises_a);
+                        holder.iv_b.setImageResource(R.drawable.exercises_b);
+                        holder.iv_d.setImageResource(R.drawable.exercises_right_icon);
                     }
                     break;
                 default:
@@ -210,7 +180,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
         /**
          * 当用户点击A选项的点击事件
          */
-        vh.iv_a.setOnClickListener(new View.OnClickListener(){
+        holder.iv_a.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
@@ -220,14 +190,14 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                 }else {
                     selectedPosition.add(position + "");
                 }
-                onSelectListener.onSelectA(position,vh.iv_a,vh.iv_b,vh.iv_c,vh.iv_d);
+                onSelectListener.onSelectA(position,holder.iv_a,holder.iv_b,holder.iv_c,holder.iv_d);
             }
         });
 
         /**
          * 当用户点击B选项的点击事件
          */
-        vh.iv_b.setOnClickListener(new View.OnClickListener(){
+        holder.iv_b.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
@@ -237,14 +207,14 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                 }else {
                     selectedPosition.add(position + "");
                 }
-                onSelectListener.onSelectB(position,vh.iv_a, vh.iv_b, vh.iv_c, vh.iv_d);
+                onSelectListener.onSelectB(position,holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
             }
         });
 
         /**
          * 当用户点击C选项的点击事件
          */
-        vh.iv_c.setOnClickListener(new View.OnClickListener(){
+        holder.iv_c.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
@@ -254,14 +224,14 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                 }else {
                     selectedPosition.add(position + "");
                 }
-                onSelectListener.onSelectC(position,vh.iv_a, vh.iv_b, vh.iv_c, vh.iv_d);
+                onSelectListener.onSelectC(position,holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
             }
         });
 
         /**
          * 当用户点击D选项的点击事件
          */
-        vh.iv_d.setOnClickListener(new View.OnClickListener(){
+        holder.iv_d.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
@@ -271,16 +241,28 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                 }else {
                     selectedPosition.add(position + "");
                 }
-                onSelectListener.onSelectD(position,vh.iv_a, vh.iv_b, vh.iv_c, vh.iv_d);
+                onSelectListener.onSelectD(position,holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
             }
         });
-
-        return convertView;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView subject,tv_a,tv_b,tv_c,tv_d;
-        public ImageView iv_a,iv_b,iv_c,iv_d;
+    protected class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView subject,tv_a,tv_b,tv_c,tv_d;
+        private ImageView iv_a,iv_b,iv_c,iv_d;
+
+        public ViewHolder(View view) {
+            super(view);
+            subject = (TextView) view.findViewById(R.id.tv_subject);
+            iv_a = (ImageView) view.findViewById(R.id.iv_a);
+            tv_a = (TextView) view.findViewById(R.id.tv_a);
+            iv_b = (ImageView) view.findViewById(R.id.iv_b);
+            tv_b = (TextView) view.findViewById(R.id.tv_b);
+            iv_c = (ImageView) view.findViewById(R.id.iv_c);
+            tv_c = (TextView) view.findViewById(R.id.tv_c);
+            iv_d = (ImageView) view.findViewById(R.id.iv_d);
+            tv_d = (TextView) view.findViewById(R.id.tv_d);
+
+        }
     }
 
     public interface OnSelectListener{

@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setSelectedStatus(2);
             }
         }
+        if (requestCode == 000){
+            setSelectedStatus(1);
+        }
     }
 
     @Override
