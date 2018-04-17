@@ -5,9 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,11 +24,13 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
     private Context mContext;
     private LayoutInflater layoutInflater;
     private OnSelectListener onSelectListener;
+    private MyItemClickListener mItemClickListener;
 
-    public ExercisesDetailAdapter(Context context,OnSelectListener onSelectListener){
+    public ExercisesDetailAdapter(Context context,OnSelectListener onSelectListener,MyItemClickListener mItemClickListener){
         this.mContext = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.onSelectListener = onSelectListener;
+        this.mItemClickListener = mItemClickListener;
     }
 
 
@@ -38,7 +38,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.exercises_detail_list_item, parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mItemClickListener);
     }
 
     @Override
@@ -191,6 +191,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                     selectedPosition.add(position + "");
                 }
                 onSelectListener.onSelectA(position,holder.iv_a,holder.iv_b,holder.iv_c,holder.iv_d);
+                mItemClickListener.onItemClick(view,holder.getPosition()+1);
             }
         });
 
@@ -208,6 +209,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                     selectedPosition.add(position + "");
                 }
                 onSelectListener.onSelectB(position,holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
+                mItemClickListener.onItemClick(view,holder.getPosition()+1);
             }
         });
 
@@ -225,6 +227,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                     selectedPosition.add(position + "");
                 }
                 onSelectListener.onSelectC(position,holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
+                mItemClickListener.onItemClick(view,holder.getPosition()+1);
             }
         });
 
@@ -242,6 +245,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                     selectedPosition.add(position + "");
                 }
                 onSelectListener.onSelectD(position,holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
+                mItemClickListener.onItemClick(view,holder.getPosition()+1);
             }
         });
     }
@@ -249,9 +253,11 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
     protected class ViewHolder extends RecyclerView.ViewHolder {
         private TextView subject,tv_a,tv_b,tv_c,tv_d;
         private ImageView iv_a,iv_b,iv_c,iv_d;
+        private MyItemClickListener mListener;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, MyItemClickListener myItemClickListener) {
             super(view);
+            this.mListener = myItemClickListener;
             subject = (TextView) view.findViewById(R.id.tv_subject);
             iv_a = (ImageView) view.findViewById(R.id.iv_a);
             tv_a = (TextView) view.findViewById(R.id.tv_a);
@@ -263,6 +269,10 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
             tv_d = (TextView) view.findViewById(R.id.tv_d);
 
         }
+    }
+
+    public interface MyItemClickListener {
+        void onItemClick(View view, int position);
     }
 
     public interface OnSelectListener{

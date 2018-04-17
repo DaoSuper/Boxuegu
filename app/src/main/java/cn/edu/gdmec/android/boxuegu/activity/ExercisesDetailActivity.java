@@ -10,9 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +28,7 @@ public class ExercisesDetailActivity extends Activity {
     private TextView tv_back;
     private RelativeLayout title_bar;
     private RecyclerView rv_list;
+    private TextView tv_dibu;
     private String title;
     private int id;
     private List<ExercisesBean> ebl;
@@ -63,12 +62,13 @@ public class ExercisesDetailActivity extends Activity {
      */
     private void init(){
         tv_main_title = (TextView) findViewById(R.id.tv_main_title);
+        tv_main_title.setText(title);
         tv_back = (TextView) findViewById(R.id.tv_back);
         title_bar = (RelativeLayout) findViewById(R.id.rl_title_bar);
         title_bar.setBackgroundColor(Color.parseColor("#30B4FF"));
         rv_list = (RecyclerView) findViewById(R.id.rv_list);
         rv_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        tv_main_title.setText(title);
+        tv_dibu = (TextView) findViewById(R.id.tv_dibu);
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,6 +186,11 @@ public class ExercisesDetailActivity extends Activity {
                         break;
                 }
                 AnalysisUtils.setABCDEnable(false,iv_a,iv_b,iv_c,iv_d);
+            }
+        }, new ExercisesDetailAdapter.MyItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                tv_dibu.setText("第" + position + "题完成，共5题");
             }
         });
         adapter.setData(ebl);
