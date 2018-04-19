@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class ExercisesDetailActivity extends AppCompatActivity {
     private int id;
     private List<ExercisesBean> ebl;
     private ExercisesDetailAdapter adapter;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,6 @@ public class ExercisesDetailActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         id = getIntent().getIntExtra("id", 0);
         title = getIntent().getStringExtra("title");
-        ebl = new ArrayList<ExercisesBean>();
         initData();
         init();
     }
@@ -63,8 +64,6 @@ public class ExercisesDetailActivity extends AppCompatActivity {
         tv_back = (TextView) findViewById(R.id.tv_back);
         title_bar = (RelativeLayout) findViewById(R.id.rl_title_bar);
         title_bar.setBackgroundColor(Color.parseColor("#30B4FF"));
-        rv_list = (RecyclerView) findViewById(R.id.rv_list);
-        rv_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         tv_dibu = (TextView) findViewById(R.id.tv_dibu);
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +71,10 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                 ExercisesDetailActivity.this.finish();
             }
         });
-        adapter = new ExercisesDetailAdapter(ExercisesDetailActivity.this, new ExercisesDetailAdapter.OnSelectListener() {
+        rv_list = (RecyclerView) findViewById(R.id.rv_list);
+        /**必要**/
+        rv_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        adapter = new ExercisesDetailAdapter(ExercisesDetailActivity.this, ebl, new ExercisesDetailAdapter.OnSelectListener() {
             @Override
             public void onSelectA(int position, ImageView iv_a, ImageView iv_b, ImageView iv_c, ImageView iv_d) {
                 //判断如果答案不是1即是A选项
@@ -99,10 +101,13 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                         break;
                 }
                 AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
+                //当实现这些接口的时候，我们已经从adapter得到了需要的position，又要重新在item设置监听来获取adapter与Activity的信息回调，实属舍近求远
+                tv_dibu.setText("第" + (position + 1) + "道题完成，共五题");
             }
 
             @Override
             public void onSelectB(int position, ImageView iv_a, ImageView iv_b, ImageView iv_c, ImageView iv_d) {
+
                 //判断如果答案不是2即是B选项
                 if (ebl.get(position).answer != 2) {
                     ebl.get(position).select = 2;
@@ -127,6 +132,7 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                         break;
                 }
                 AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
+                tv_dibu.setText("第" + (position + 1) + "道题完成，共五题");
             }
 
             @Override
@@ -155,6 +161,7 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                         break;
                 }
                 AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
+                tv_dibu.setText("第" + (position + 1) + "道题完成，共五题");
             }
 
             @Override
@@ -183,14 +190,10 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                         break;
                 }
                 AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
+                tv_dibu.setText("第" + (position + 1) + "道题完成，共五题");
             }
-        }, new ExercisesDetailAdapter.MyItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                tv_dibu.setText("第" + position + "题完成，共5题");
-            }
-        });
-        adapter.setData(ebl);
+        }
+        );
         rv_list.setAdapter(adapter);
     }
 }

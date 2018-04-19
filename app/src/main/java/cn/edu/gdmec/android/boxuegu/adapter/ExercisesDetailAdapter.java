@@ -21,46 +21,43 @@ import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
  */
 
 public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetailAdapter.ViewHolder> {
-    private List<ExercisesBean> objects = new ArrayList<ExercisesBean>();
+    private List<ExercisesBean> ebl;
     private ArrayList<String> selectedPosition = new ArrayList<String>();
     private Context mContext;
+    private LayoutInflater layoutInflater;
     private OnSelectListener onSelectListener;
-    private MyItemClickListener mItemClickListener;
 
-    public ExercisesDetailAdapter(Context context, OnSelectListener onSelectListener, MyItemClickListener mItemClickListener) {
+    public ExercisesDetailAdapter(Context context, List<ExercisesBean> ebl, OnSelectListener onSelectListener) {
         this.mContext = context;
+        this.ebl = ebl;
+        this.layoutInflater = LayoutInflater.from(context);
         this.onSelectListener = onSelectListener;
-        this.mItemClickListener = mItemClickListener;
     }
 
+    public void setData(List<ExercisesBean> ebl) {
+        this.ebl = ebl;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercises_detail_list_item, parent, false);
-        return new ViewHolder(view, mItemClickListener);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        initializeViews(objects.get(position), holder, position);
-    }
-
-    public void setData(List<ExercisesBean> objects) {
-        this.objects = objects;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+        bind(ebl.get(position), holder, position);
     }
 
     @Override
     public int getItemCount() {
-        return objects.size();
+        return ebl.size();
     }
 
-    private void initializeViews(ExercisesBean object, final ViewHolder holder, final int position) {
-
+    /**
+     * 每道题只能回答一次，正确与否会在Activity中实时判断
+     **/
+    private void bind(ExercisesBean object, final ViewHolder holder, final int position) {
         final ExercisesBean bean = object;
         if (bean != null) {
             holder.subject.setText(bean.subject);
@@ -69,7 +66,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
             holder.tv_c.setText(bean.c);
             holder.tv_d.setText(bean.d);
         }
-
+        //第一次进入，注意，当退出这个页面，答题结果不会保存，下次可以再次答题，这里是不做正确判断，仅仅根据bean内的信息显示
         if (!selectedPosition.contains("" + position)) {
             holder.iv_a.setImageResource(R.drawable.exercises_a);
             holder.iv_b.setImageResource(R.drawable.exercises_b);
@@ -77,7 +74,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
             holder.iv_d.setImageResource(R.drawable.exercises_d);
             AnalysisUtils.setABCDEnable(true, holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
         } else {
-            AnalysisUtils.setABCDEnable(true, holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
+            AnalysisUtils.setABCDEnable(false, holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
             switch (bean.select) {
                 case 0:
                     //用户所选项是正确的
@@ -180,7 +177,6 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
          * 当用户点击A选项的点击事件
          */
         holder.iv_a.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 //判断selectedPosition中是否包含此时点击的position
@@ -190,7 +186,6 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                     selectedPosition.add(position + "");
                 }
                 onSelectListener.onSelectA(position, holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
-                mItemClickListener.onItemClick(view, holder.getPosition() + 1);
             }
         });
 
@@ -198,7 +193,6 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
          * 当用户点击B选项的点击事件
          */
         holder.iv_b.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 //判断selectedPosition中是否包含此时点击的position
@@ -208,7 +202,6 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                     selectedPosition.add(position + "");
                 }
                 onSelectListener.onSelectB(position, holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
-                mItemClickListener.onItemClick(view, holder.getPosition() + 1);
             }
         });
 
@@ -226,7 +219,6 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                     selectedPosition.add(position + "");
                 }
                 onSelectListener.onSelectC(position, holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
-                mItemClickListener.onItemClick(view, holder.getPosition() + 1);
             }
         });
 
@@ -244,7 +236,6 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
                     selectedPosition.add(position + "");
                 }
                 onSelectListener.onSelectD(position, holder.iv_a, holder.iv_b, holder.iv_c, holder.iv_d);
-                mItemClickListener.onItemClick(view, holder.getPosition() + 1);
             }
         });
     }
@@ -252,11 +243,9 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
     protected class ViewHolder extends RecyclerView.ViewHolder {
         private TextView subject, tv_a, tv_b, tv_c, tv_d;
         private ImageView iv_a, iv_b, iv_c, iv_d;
-        private MyItemClickListener mListener;
 
-        public ViewHolder(View view, MyItemClickListener myItemClickListener) {
+        public ViewHolder(View view) {
             super(view);
-            this.mListener = myItemClickListener;
             subject = (TextView) view.findViewById(R.id.tv_subject);
             iv_a = (ImageView) view.findViewById(R.id.iv_a);
             tv_a = (TextView) view.findViewById(R.id.tv_a);
@@ -266,12 +255,7 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
             tv_c = (TextView) view.findViewById(R.id.tv_c);
             iv_d = (ImageView) view.findViewById(R.id.iv_d);
             tv_d = (TextView) view.findViewById(R.id.tv_d);
-
         }
-    }
-
-    public interface MyItemClickListener {
-        void onItemClick(View view, int position);
     }
 
     public interface OnSelectListener {
