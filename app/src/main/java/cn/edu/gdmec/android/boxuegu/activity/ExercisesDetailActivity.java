@@ -1,8 +1,5 @@
 package cn.edu.gdmec.android.boxuegu.activity;
 
-
-
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +20,7 @@ import cn.edu.gdmec.android.boxuegu.adapter.ExercisesDetailAdapter;
 import cn.edu.gdmec.android.boxuegu.bean.ExercisesBean;
 import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 
-public class ExercisesDetailActivity extends Activity {
+public class ExercisesDetailActivity extends AppCompatActivity {
     private TextView tv_main_title;
     private TextView tv_back;
     private RelativeLayout title_bar;
@@ -40,19 +37,19 @@ public class ExercisesDetailActivity extends Activity {
         setContentView(R.layout.activity_exercises_detail);
         //设置此界面为竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        id = getIntent().getIntExtra("id",0);
+        id = getIntent().getIntExtra("id", 0);
         title = getIntent().getStringExtra("title");
         ebl = new ArrayList<ExercisesBean>();
         initData();
         init();
     }
 
-    private void initData(){
-        try{
+    private void initData() {
+        try {
             //获取习题数据
             InputStream is = getResources().getAssets().open("chapter" + id + ".xml");
             ebl = AnalysisUtils.getExercisesInfos(is);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -60,7 +57,7 @@ public class ExercisesDetailActivity extends Activity {
     /**
      * 初始化控件
      */
-    private void init(){
+    private void init() {
         tv_main_title = (TextView) findViewById(R.id.tv_main_title);
         tv_main_title.setText(title);
         tv_back = (TextView) findViewById(R.id.tv_back);
@@ -79,12 +76,12 @@ public class ExercisesDetailActivity extends Activity {
             @Override
             public void onSelectA(int position, ImageView iv_a, ImageView iv_b, ImageView iv_c, ImageView iv_d) {
                 //判断如果答案不是1即是A选项
-                if (ebl.get(position).answer != 1){
+                if (ebl.get(position).answer != 1) {
                     ebl.get(position).select = 1;
-                }else{
+                } else {
                     ebl.get(position).select = 0;
                 }
-                switch (ebl.get(position).answer){
+                switch (ebl.get(position).answer) {
                     case 1:
                         iv_a.setImageResource(R.drawable.exercises_right_icon);
                         break;
@@ -101,18 +98,18 @@ public class ExercisesDetailActivity extends Activity {
                         iv_d.setImageResource(R.drawable.exercises_right_icon);
                         break;
                 }
-                AnalysisUtils.setABCDEnable(false,iv_a,iv_b,iv_c,iv_d);
+                AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
             }
 
             @Override
             public void onSelectB(int position, ImageView iv_a, ImageView iv_b, ImageView iv_c, ImageView iv_d) {
                 //判断如果答案不是2即是B选项
-                if (ebl.get(position).answer != 2){
+                if (ebl.get(position).answer != 2) {
                     ebl.get(position).select = 2;
-                }else{
+                } else {
                     ebl.get(position).select = 0;
                 }
-                switch (ebl.get(position).answer){
+                switch (ebl.get(position).answer) {
                     case 1:
                         iv_a.setImageResource(R.drawable.exercises_right_icon);
                         iv_b.setImageResource(R.drawable.exercises_error_icon);
@@ -129,18 +126,18 @@ public class ExercisesDetailActivity extends Activity {
                         iv_d.setImageResource(R.drawable.exercises_right_icon);
                         break;
                 }
-                AnalysisUtils.setABCDEnable(false,iv_a,iv_b,iv_c,iv_d);
+                AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
             }
 
             @Override
             public void onSelectC(int position, ImageView iv_a, ImageView iv_b, ImageView iv_c, ImageView iv_d) {
                 //判断如果答案不是3即是C选项
-                if (ebl.get(position).answer != 3){
+                if (ebl.get(position).answer != 3) {
                     ebl.get(position).select = 3;
-                }else{
+                } else {
                     ebl.get(position).select = 0;
                 }
-                switch (ebl.get(position).answer){
+                switch (ebl.get(position).answer) {
                     case 1:
                         iv_a.setImageResource(R.drawable.exercises_right_icon);
                         iv_c.setImageResource(R.drawable.exercises_error_icon);
@@ -157,18 +154,18 @@ public class ExercisesDetailActivity extends Activity {
                         iv_d.setImageResource(R.drawable.exercises_right_icon);
                         break;
                 }
-                AnalysisUtils.setABCDEnable(false,iv_a,iv_b,iv_c,iv_d);
+                AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
             }
 
             @Override
             public void onSelectD(int position, ImageView iv_a, ImageView iv_b, ImageView iv_c, ImageView iv_d) {
                 //判断如果答案不是4即是D选项
-                if (ebl.get(position).answer != 4){
+                if (ebl.get(position).answer != 4) {
                     ebl.get(position).select = 4;
-                }else{
+                } else {
                     ebl.get(position).select = 0;
                 }
-                switch (ebl.get(position).answer){
+                switch (ebl.get(position).answer) {
                     case 1:
                         iv_a.setImageResource(R.drawable.exercises_right_icon);
                         iv_d.setImageResource(R.drawable.exercises_error_icon);
@@ -185,7 +182,7 @@ public class ExercisesDetailActivity extends Activity {
                         iv_d.setImageResource(R.drawable.exercises_right_icon);
                         break;
                 }
-                AnalysisUtils.setABCDEnable(false,iv_a,iv_b,iv_c,iv_d);
+                AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
             }
         }, new ExercisesDetailAdapter.MyItemClickListener() {
             @Override
