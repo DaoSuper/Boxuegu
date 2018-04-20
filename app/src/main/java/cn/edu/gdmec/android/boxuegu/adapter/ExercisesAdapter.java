@@ -1,5 +1,6 @@
 package cn.edu.gdmec.android.boxuegu.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -98,7 +99,7 @@ public class ExercisesAdapter extends BaseAdapter {
                 intent.putExtra("id", bean.id);
                 //把标题传递到习题详细页面
                 intent.putExtra("title", bean.title);
-                mContext.startActivity(intent);
+                ((Activity) mContext).startActivityForResult(intent, 000);
             }
         });
         return convertView;

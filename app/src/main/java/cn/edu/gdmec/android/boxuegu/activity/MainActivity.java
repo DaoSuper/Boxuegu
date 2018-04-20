@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.edu.gdmec.android.boxuegu.R;
+import cn.edu.gdmec.android.boxuegu.bean.ExercisesListLab;
 import cn.edu.gdmec.android.boxuegu.fragment.CourseFragment;
 import cn.edu.gdmec.android.boxuegu.fragment.ExercisesFragment;
 import cn.edu.gdmec.android.boxuegu.fragment.MyInfoFragment;
@@ -63,8 +64,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setSelectedStatus(2);
             }
         }
-        if (requestCode == 000){
+        if (requestCode == 000) {
             setSelectedStatus(1);
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_body, new ExercisesFragment()).commit();
+            int a = data.getIntExtra("count", 9);
+            int id = data.getIntExtra("id", 9);
+            if (a == 5) {
+                ExercisesListLab.get().getExercisesList().get((id - 1)).content = "已完成";
+            }
+            return;
         }
     }
 

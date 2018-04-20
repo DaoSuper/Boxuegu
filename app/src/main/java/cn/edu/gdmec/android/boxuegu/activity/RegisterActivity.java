@@ -82,7 +82,6 @@ public class RegisterActivity extends AppCompatActivity {
                     data.putExtra("userName", userName);
                     setResult(RESULT_OK, data);
                     RegisterActivity.this.finish();
-
                 }
             }
         });

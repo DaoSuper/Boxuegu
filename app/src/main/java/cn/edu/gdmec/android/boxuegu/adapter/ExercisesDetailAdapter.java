@@ -34,10 +34,6 @@ public class ExercisesDetailAdapter extends RecyclerView.Adapter<ExercisesDetail
         this.onSelectListener = onSelectListener;
     }
 
-    public void setData(List<ExercisesBean> ebl) {
-        this.ebl = ebl;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercises_detail_list_item, parent, false);

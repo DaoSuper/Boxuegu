@@ -1,11 +1,13 @@
 package cn.edu.gdmec.android.boxuegu.activity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -50,6 +52,11 @@ public class ExercisesDetailActivity extends AppCompatActivity {
             //获取习题数据
             InputStream is = getResources().getAssets().open("chapter" + id + ".xml");
             ebl = AnalysisUtils.getExercisesInfos(is);
+            Intent data = new Intent();
+            //没有被点击，需要这么设置否则闪退
+            data.putExtra("count", count);
+            data.putExtra("id", id);
+            setResult(RESULT_OK, data);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,6 +82,7 @@ public class ExercisesDetailActivity extends AppCompatActivity {
         /**必要**/
         rv_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         adapter = new ExercisesDetailAdapter(ExercisesDetailActivity.this, ebl, new ExercisesDetailAdapter.OnSelectListener() {
+
             @Override
             public void onSelectA(int position, ImageView iv_a, ImageView iv_b, ImageView iv_c, ImageView iv_d) {
                 //判断如果答案不是1即是A选项
@@ -103,6 +111,11 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                 AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
                 //当实现这些接口的时候，我们已经从adapter得到了需要的position，又要重新在item设置监听来获取adapter与Activity的信息回调，实属舍近求远
                 tv_dibu.setText("第" + (position + 1) + "道题完成，共五题");
+                count++;
+                Intent data = new Intent();
+                data.putExtra("id", id);
+                data.putExtra("count", count);
+                setResult(RESULT_OK, data);
             }
 
             @Override
@@ -133,6 +146,11 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                 }
                 AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
                 tv_dibu.setText("第" + (position + 1) + "道题完成，共五题");
+                count++;
+                Intent data = new Intent();
+                data.putExtra("id", id);
+                data.putExtra("count", count);
+                setResult(RESULT_OK, data);
             }
 
             @Override
@@ -162,6 +180,11 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                 }
                 AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
                 tv_dibu.setText("第" + (position + 1) + "道题完成，共五题");
+                count++;
+                Intent data = new Intent();
+                data.putExtra("id", id);
+                data.putExtra("count", count);
+                setResult(RESULT_OK, data);
             }
 
             @Override
@@ -191,6 +214,11 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                 }
                 AnalysisUtils.setABCDEnable(false, iv_a, iv_b, iv_c, iv_d);
                 tv_dibu.setText("第" + (position + 1) + "道题完成，共五题");
+                count++;
+                Intent data = new Intent();
+                data.putExtra("id", id);
+                data.putExtra("count", count);
+                setResult(RESULT_OK, data);
             }
         }
         );
