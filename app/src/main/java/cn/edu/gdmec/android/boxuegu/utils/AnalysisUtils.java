@@ -90,6 +90,7 @@ public class AnalysisUtils {
         }
         return exercisesInfos;
     }
+    
     /**
      * 解析每章的课程视频信息
      */
