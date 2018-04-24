@@ -71,6 +71,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int id = data.getIntExtra("id", 9);
             if (a == 5) {
                 ExercisesListLab.get().getExercisesList().get((id - 1)).content = "已完成";
+                SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();//获取编辑器
+                editor.putInt("hasFinish"+id, id);//存入boolean类型的登录状态
+                editor.commit();//提交修改
             }
             return;
         }
