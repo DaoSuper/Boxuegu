@@ -40,7 +40,7 @@ public class VideoPlayActivity extends AppCompatActivity {
         videoView.setMediaController(controller);
         play();
     }
-
+    
     /**
      * 播放视频
      */
@@ -49,9 +49,8 @@ public class VideoPlayActivity extends AppCompatActivity {
             Toast.makeText(this, "本地没有此视频，暂时无法播放", Toast.LENGTH_SHORT).show();
             return;
         }
-           //String uri = "android.resource://" + getPackageName() + "/" + R.raw.video11;
-        /*vbl = new VideoView();*/
-           String uri= videoPath;
+
+        String uri= videoPath;
         videoView.setVideoPath(uri);
         videoView.requestFocus();
         videoView.start();
