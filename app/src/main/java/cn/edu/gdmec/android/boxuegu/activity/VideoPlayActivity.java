@@ -19,7 +19,7 @@ public class VideoPlayActivity extends AppCompatActivity {
 
     private VideoView videoView;
     private MediaController controller;
-    private String videoPath; //本地视频地址
+    private String videoPath;
     private int position;
     private VideoBean vbl;
 
