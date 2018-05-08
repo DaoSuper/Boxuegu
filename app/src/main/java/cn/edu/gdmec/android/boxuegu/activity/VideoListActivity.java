@@ -110,27 +110,33 @@ public class VideoListActivity extends AppCompatActivity implements View.OnClick
      * 设置视频列表本地数据
      */
     private void initData() {
-        JSONArray jsonArray;
+        JSONArray jsonArray,jsonArray1;
         InputStream is = null;
         try{
             is = getResources().getAssets().open("data.json");
             jsonArray = new JSONArray(read(is));
             videoList = new ArrayList<VideoBean>();
             for (int i =0; i<jsonArray.length(); i++){
-                VideoBean bean = new VideoBean();
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.getInt("chapterId") == chapterId){
-//                    bean.chapterId = jsonObject.getInt("chapterId");
-////                    bean.videoId = Integer.parseInt(jsonObject.getString("videoId"));
-////                    bean.title = jsonObject.getString("title");
-////                    bean.secondTitle = jsonObject.getString("secondTitle");
-////                    bean.videoPath = jsonObject.getString("videoPath");
-                    bean.chapterId = jsonObject.getInt("chapterId");
-                    bean.videoId = Integer.parseInt(jsonObject.getJSONArray("data").getJSONObject(0).getString("videoId"));
-                    bean.title = jsonObject.getJSONArray("data").getJSONObject(1).getString("title");
-                    bean.secondTitle = jsonObject.getJSONArray("data").getJSONObject(2).getString("secondTitle");
-                    bean.videoPath = jsonObject.getJSONArray("data").getJSONObject(3).getString("videoPath");
-                    videoList.add(bean);
+                VideoBean bean;
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                JSONArray children = jsonObject1.getJSONArray("data");
+
+                if (jsonObject1.getInt("chapterId") == chapterId){
+                    for (int j = 0; j < children.length(); j++) {
+                        bean = new VideoBean();
+                        bean.chapterId = jsonObject1.getInt("chapterId");
+                        JSONObject jsonObject2 = children.getJSONObject(j);
+                        bean.videoId = Integer.parseInt(jsonObject2.getString("videoId"));
+                        bean.title = jsonObject2.getString("title");
+                        bean.secondTitle = jsonObject2.getString("secondTitle");
+                        bean.videoPath = jsonObject2.getString("videoPath");
+                        videoList.add(bean);
+                    }
+                    /*bean.videoId = Integer.parseInt(jsonObject.getString("videoId"));
+                    bean.title = jsonObject.getString("title");
+                    bean.secondTitle = jsonObject.getString("secondTitle");
+                    bean.videoPath = jsonObject.getString("videoPath");
+                    videoList.add(bean);*/
                 }
                 bean = null;
             }
