@@ -40,7 +40,7 @@ public class VideoPlayActivity extends AppCompatActivity {
         videoView.setMediaController(controller);
         play();
     }
-    
+
     /**
      * 播放视频
      */
