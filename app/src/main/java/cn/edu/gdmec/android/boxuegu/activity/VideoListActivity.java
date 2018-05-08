@@ -120,11 +120,16 @@ public class VideoListActivity extends AppCompatActivity implements View.OnClick
                 VideoBean bean = new VideoBean();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.getInt("chapterId") == chapterId){
+//                    bean.chapterId = jsonObject.getInt("chapterId");
+////                    bean.videoId = Integer.parseInt(jsonObject.getString("videoId"));
+////                    bean.title = jsonObject.getString("title");
+////                    bean.secondTitle = jsonObject.getString("secondTitle");
+////                    bean.videoPath = jsonObject.getString("videoPath");
                     bean.chapterId = jsonObject.getInt("chapterId");
-                    bean.videoId = Integer.parseInt(jsonObject.getString("videoId"));
-                    bean.title = jsonObject.getString("title");
-                    bean.secondTitle = jsonObject.getString("secondTitle");
-                    bean.videoPath = jsonObject.getString("videoPath");
+                    bean.videoId = Integer.parseInt(jsonObject.getJSONArray("data").getJSONObject(0).getString("videoId"));
+                    bean.title = jsonObject.getJSONArray("data").getJSONObject(1).getString("title");
+                    bean.secondTitle = jsonObject.getJSONArray("data").getJSONObject(2).getString("secondTitle");
+                    bean.videoPath = jsonObject.getJSONArray("data").getJSONObject(3).getString("videoPath");
                     videoList.add(bean);
                 }
                 bean = null;
